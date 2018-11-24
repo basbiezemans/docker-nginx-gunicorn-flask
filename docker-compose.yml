@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+
+  web:
+    build:
+      context: ./web
+    ports:
+      - 8000:8000
+    command: gunicorn app.app:app --workers 4 --name app -b 0.0.0.0:8000
+
+  nginx:
+    restart: always
+    image: nginx
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - 80:80
+    links:
+      - web
